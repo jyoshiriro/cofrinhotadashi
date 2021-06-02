@@ -1,0 +1,33 @@
+body {
+    padding: 2em;
+}
+
+#div_authentication input, #div_authentication button {
+    font-size: large;
+}
+
+#div_password_error {
+    background-color: darksalmon;
+    color: brown;
+    font-weight: bold;
+}
+
+#div_operations button {
+    font-weight: bold;
+    padding: 1em;
+}
+
+#b_balance {
+    color: rgb(12, 100, 71);
+}
+
+.deposit {
+    color: rgb(120, 173, 243);
+    background-color: rgb(9, 36, 110);
+    margin-right: 1em;
+}
+
+.withdrawal {
+    color: antiquewhite;
+    background-color: crimson;
+}
