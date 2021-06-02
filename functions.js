@@ -55,7 +55,8 @@ function withdrawal() {
 
 function doit(type) {
 
-    let cause = prompt('Why?','');
+    let cause = prompt('Why?', '');
+    alert('cause: '+cause);
 
     if (cause == null) {
         alert('Operation aborted! :(');
