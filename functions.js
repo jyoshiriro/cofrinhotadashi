@@ -57,6 +57,11 @@ function doit(type) {
 
     let cause = prompt('Why?','');
 
+    if (cause == null) {
+        alert('Operation aborted! :(');
+        return;
+    }
+
     let body = {
         quando: new Date().toISOString(),
         quem: user,
