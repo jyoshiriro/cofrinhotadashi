@@ -31,7 +31,7 @@ function loadBalance() {
         let balance = 0;
         
         if (data.length > 0) {
-            balance = data[0].saldo;
+            balance = Number(data[0].saldo);
             updateStatement();
         }
 
@@ -45,28 +45,49 @@ function loadBalance() {
 
 
 function deposit() {
-    doit("E");
+    doit("E", 0.50);
 }
 
 function withdrawal() {
-    doit("S");
+    doit("S", 1.0);
 }
 
+function buy() {
+    let price = prompt('Price ?');
 
-function doit(type) {
+    if (price != null) {
+        doit("B", Number(price));
+    } else {
+        alert('Operation aborted! :(');
+    }
+}
 
-    let cause = prompt('Why?', '');
+function doit(type, value) {
+
+    let isBuy = type == 'B';
+    let isLess = isBuy || type == 'S';
+
+    if (isLess) {
+        if (value > getBalance()) {
+            alert(`Insufficient balance! Operation aborted!`);
+            return;
+        }
+    }
+
+    let cause = prompt(isBuy ? 'What?' : 'Why?');
 
     if (cause == null) {
         alert('Operation aborted! :(');
         return;
     }
 
+    cause = isBuy ? `${cause} (R$${(value).toFixed(2)})` : cause;
+
     let body = {
         quando: new Date().toISOString(),
         quem: user,
-        valor: type == "E" ? 0.50 : -1.00,
-        tipo: type,
+        valor: isLess ? -(value) : value,
+        tipo: isBuy ? 'S' : type,
         motivo: cause
     }
 
@@ -90,10 +111,13 @@ function doit(type) {
     });
 }
 
+function getBalance() {
+    return Number(b_balance.innerHTML.substring(1));
+}
+
 function updateBalance(value) {
 
-    let balance = Number(b_balance.innerHTML.substring(1));
-    let newBalance = balance + value;
+    let newBalance = getBalance() + value;
     newBalance = newBalance < 0 ? 0 : newBalance;
 
     let fetchData = {
@@ -107,9 +131,7 @@ function updateBalance(value) {
     fetch(`${baseUrl}/saldo/1`, fetchData)
     .then((resp) => {
         if (resp.status == 200) {
-            alert('Done :)');
-            loadBalance();
-            
+            loadBalance();        
         }
     })
     .catch(function(error) {
@@ -137,14 +159,25 @@ function updateStatement() {
 
         data.reverse();
 
+        let linesCounter = 0;
         data.forEach(line => {
             let when = new Date(Date.parse(line.quando));
             let displayWhen = `${when.getDate().toString().padStart(2, '0')}/${(when.getMonth()+1).toString().padStart(2, '0')} - ${when.getHours().toString().padStart(2, '0')}:${when.getMinutes().toString().padStart(2, '0')}`
             let cause = line.motivo != "" ? `- ${line.motivo}` : ""
 
             let color = line.tipo == "E" ? 'blue' : 'maroon';
+            
+            let operationScreen = `${displayWhen} - <b>${line.quem}</b> ${cause}`;
+            
+            let operationPrompt = `${displayWhen} - ${line.quem} ${cause}`;
+            let deleteLink = ++linesCounter <= 5 
+                    ? `<a href="javascript:;" onclick="promptDelete('${operationPrompt}', ${line.id}, ${line.valor})">[X]</a>` 
+                    : '';
 
-            div_statement.innerHTML += `<span style="color:${color}">${displayWhen} - <b>${line.quem}</b> ${cause}</span> <br>`;    
+            div_statement.innerHTML += `
+                <span id="s_op${line.id}" style="color:${color}">
+                    ${operationScreen} ${deleteLink}                    
+                </span> <br>  <br>`;    
         });
 
         
@@ -155,9 +188,22 @@ function updateStatement() {
     });
 }
 
-function deleteOperation(id) {
+function promptDelete(operation, id, type, value) {
+    if (confirm(`Undo the operation "${operation}"?`)) {
+        deleteOperation(id, type, value);
+    }
+}
+
+function deleteOperation(id, value) {
     fetch(`${baseUrl}/operacoes/${id}`, {method: 'DELETE'})
-    .then((resp) => console.log(`${id} deleted`))
+    .then((resp) =>  {
+        console.log(`${id} deleted`);
+        if (value == undefined) {
+            loadBalance();
+        } else {
+            updateBalance(-(value));
+        }
+    })
     .catch(function(error) {
         console.error('API Delete Operation error', error);
     });

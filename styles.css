@@ -31,3 +31,14 @@ body {
     color: antiquewhite;
     background-color: crimson;
 }
+
+.buy {
+    color: violet;
+    background-color: rebeccapurple;
+}
+
+
+#div_statement span a {
+    font-weight: bold;
+    color: orangered;
+}
