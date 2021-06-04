@@ -57,9 +57,7 @@ function buy() {
 
     if (price != null) {
         doit("B", Number(price));
-    } else {
-        alert('Operation aborted! :(');
-    }
+    } 
 }
 
 function doit(type, value) {
@@ -77,7 +75,6 @@ function doit(type, value) {
     let cause = prompt(isBuy ? 'What?' : 'Why?');
 
     if (cause == null) {
-        alert('Operation aborted! :(');
         return;
     }
 
