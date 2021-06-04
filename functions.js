@@ -35,12 +35,44 @@ function loadBalance() {
             updateStatement();
         }
 
-        b_balance.innerHTML = `$${balance.toFixed(2)}`;
+        updateBalanceIncreasing(balance);
     })
     .catch(function(error) {
         console.error('API Balance error', error);
         b_balance.innerHTML = "We'got a situation :(";
     });
+}
+
+let increasing = 0.238;
+let maxIncreasingTimeMs = 3000;
+
+function updateBalanceIncreasing(newBalance, tempPrior) {
+    
+    let interval = maxIncreasingTimeMs/((1/increasing)*newBalance);
+    
+    if (tempPrior == undefined) {
+        tempPrior = 0;
+        console.log('interval!', interval);
+    }
+    if (tempPrior < newBalance - increasing) {
+        updateBalanceOnScreen(tempPrior, false);
+        tempPrior += increasing;
+        setTimeout(() => {
+            updateBalanceIncreasing(newBalance, tempPrior)
+        }, interval);
+    } else {
+        updateBalanceOnScreen(newBalance);
+    }
+}
+
+function updateBalanceOnScreen(newBalance, ignoreCents = true) {
+    let onScreen;
+    if (ignoreCents) {
+        onScreen = Number(newBalance.toFixed(0)) == Number(newBalance.toFixed(2)) ? parseInt(newBalance) : newBalance.toFixed(2);
+    } else {
+        onScreen = newBalance.toFixed(2);
+    }
+    b_balance.innerHTML = `$${onScreen}`;
 }
 
 
