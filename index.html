@@ -11,9 +11,9 @@
 <body>
 
     <h3>TADASHI'S PIG BANK</h3> 
-    
+
     <div id="div_authentication">
-        <input type="password" placeholder="Password" id="in_password" autofocus> 
+        <input type="password" placeholder="Password" id="in_password" autofocus inputmode="numeric"> 
         <button onclick="login()">Enter</button>   
         <div id="div_password_error" style="display: none;">Sorry! Try Again!</div>
     </div>
@@ -24,6 +24,7 @@
 
         <h1 onclick="loadBalance()">Balance: <span id="b_balance">0.00</span></h1>
 
+        <br>
         <button onclick="deposit()" class="deposit">Deposit &starf;</button>
         <button onclick="withdrawal()" class="withdrawal">Withdrawal &odash;</button>
         
