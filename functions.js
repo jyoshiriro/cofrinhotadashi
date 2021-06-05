@@ -1,6 +1,11 @@
 baseUrl = 'https://60b6deef17d1dc0017b886b3.mockapi.io';
 user = '';
 
+function init() {
+    document.getElementById('in_password').focus();
+    //document.getElementById('in_password').click();
+}
+
 function login() {
     let today = new Date()
     let day = today.getDate().toString().padStart(2, '0');
@@ -49,7 +54,7 @@ let maxIncreasingTimeMs = 3000;
 function updateBalanceIncreasing(newBalance, tempPrior) {
     
     let interval = maxIncreasingTimeMs/((1/increasing)*newBalance);
-    
+
     if (tempPrior == undefined) {
         tempPrior = 0;
         console.log('interval!', interval);
@@ -62,6 +67,8 @@ function updateBalanceIncreasing(newBalance, tempPrior) {
         }, interval);
     } else {
         updateBalanceOnScreen(newBalance);
+        img_tadashi.style.display = '';
+        img_tadashi.src = (newBalance > 5) ? 'tadashi-money.png' : 'tadashi-nomoney.png';
     }
 }
 

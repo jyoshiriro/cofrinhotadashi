@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="styles.css">
     <script src="functions.js"></script>
 </head>
-<body>
+<body onload="init()">
 
     <h3>TADASHI'S PIG BANK</h3> 
 
     <div id="div_authentication">
-        <input type="password" placeholder="Password" id="in_password" autofocus inputmode="numeric"> 
+        <input type="password" placeholder="Password" id="in_password" inputmode="numeric"> 
         <button onclick="login()">Enter</button>   
         <div id="div_password_error" style="display: none;">Sorry! Try Again!</div>
     </div>
@@ -23,6 +23,10 @@
         <i>Hello, <b id="b_user"></b></i>
 
         <h1 onclick="loadBalance()">Balance: <span id="b_balance">0.00</span></h1>
+
+        
+        <img src="tadashi.png" id="img_tadashi" style="height: 12em;">
+        
 
         <br>
         <button onclick="deposit()" class="deposit">Deposit &starf;</button>
