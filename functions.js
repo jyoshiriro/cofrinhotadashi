@@ -1,9 +1,10 @@
 baseUrl = 'https://60b6deef17d1dc0017b886b3.mockapi.io';
 user = '';
 
+balance = 0;
+
 function init() {
     document.getElementById('in_password').focus();
-    //document.getElementById('in_password').click();
 }
 
 function login() {
@@ -33,8 +34,7 @@ function loadBalance() {
     fetch(`${baseUrl}/saldo`)
     .then((resp) => resp.json())
     .then(function(data) {
-        let balance = 0;
-        
+
         if (data.length > 0) {
             balance = Number(data[0].saldo);
             updateStatement();
@@ -105,7 +105,7 @@ function doit(type, value) {
     let isLess = isBuy || type == 'S';
 
     if (isLess) {
-        if (value > getBalance()) {
+        if (value > balance) {
             alert(`Insufficient balance! Operation aborted!`);
             return;
         }
@@ -147,18 +147,14 @@ function doit(type, value) {
     });
 }
 
-function getBalance() {
-    return Number(b_balance.innerHTML.substring(1));
-}
-
 function updateBalance(value) {
 
-    let newBalance = getBalance() + value;
-    newBalance = newBalance < 0 ? 0 : newBalance;
+    balance = balance + value;
+    balance = balance < 0 ? 0 : balance;
 
     let fetchData = {
         method: 'PUT',
-        body: JSON.stringify({ saldo: newBalance }),
+        body: JSON.stringify({ saldo: balance }),
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         }
