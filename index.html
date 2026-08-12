@@ -73,11 +73,8 @@
       txList.innerHTML = '';
       (data.lastTransacions || []).forEach(tx => {
         const moeda = tx.moeda || 'BRL';
-        const valor = new Intl.NumberFormat(moeda === 'BRL' ? 'pt-BR' : 'en-US', {
-          style: 'currency',
-          currency: moeda,
-          minimumFractionDigits: 2,
-        }).format(tx.valor).replace(/^\$/, 'U$ ');
+        const valorBruto = Number(tx.valor);
+        const valor = (valorBruto < 0 ?"-":"")+(moeda === 'BRL' ? "R$" : "U$") + (valorBruto < 0 ? valorBruto*-1 : valorBruto).toFixed(2);
         const div = document.createElement('div');
         div.className = 'transaction';
         div.innerHTML = `
