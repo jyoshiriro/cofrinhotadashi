@@ -96,6 +96,71 @@ body {
 .refresh-btn:hover  { background: #6a2d8e; }
 .refresh-btn:active { transform: scale(0.95); }
 
+/* ── Transactions ── */
+.transactions-section {
+  margin-top: 1.75rem;
+  text-align: left;
+}
+
+.transactions-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 0.6rem;
+}
+
+.transactions {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.transaction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  gap: 0.75rem;
+}
+
+.transaction:last-child {
+  border-bottom: none;
+}
+
+.tx-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.tx-onde {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #444;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tx-quando {
+  font-size: 0.75rem;
+  color: #aaa;
+  font-weight: 600;
+}
+
+.tx-valor {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #e74c3c;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 /* ── Loading ── */
 .loading {
   display: flex;

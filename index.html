@@ -24,6 +24,11 @@
         <p class="balance-label">My Savings</p>
         <p id="balance-value" class="balance-value"></p>
         <button class="refresh-btn" onclick="refresh()">🔄 Refresh</button>
+
+        <div class="transactions-section">
+          <p class="transactions-title">Last transactions</p>
+          <ul id="transactions" class="transactions"></ul>
+        </div>
       </div>
 
       <div id="error" class="error hidden">
@@ -41,27 +46,48 @@
       return 'tadashi-money.png';
     }
 
-    function renderBalance() {
+    function renderBalance(data) {
       document.getElementById('loading').classList.add('hidden');
 
-      if (balanceInBRL === null || isNaN(balanceInBRL)) {
+      if (!data || data.balance === undefined || isNaN(data.balance)) {
         document.getElementById('error').classList.remove('hidden');
         return;
       }
 
+      const balance = data.balance;
       const balanceEl = document.getElementById('balance-value');
-      document.getElementById('tadashi-img').src = getImage(balanceInBRL);
+      document.getElementById('tadashi-img').src = getImage(balance);
       balanceEl.textContent = new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(balanceInBRL);
+      }).format(balance);
 
       balanceEl.className = 'balance-value ' + (
-        balanceInBRL < 10.01 ? 'balance-low'  :
-        balanceInBRL <= 50.0 ? 'balance-mid'  : 'balance-high'
+        balance < 10.01 ? 'balance-low'  :
+        balance <= 50.0 ? 'balance-mid'  : 'balance-high'
       );
+
+      const txList = document.getElementById('transactions');
+      txList.innerHTML = '';
+      (data.last7Transacions || []).forEach(tx => {
+        const valor = new Intl.NumberFormat(tx.moeda === 'BRL' ? 'pt-BR' : 'en-US', {
+          style: 'currency',
+          currency: tx.moeda,
+          minimumFractionDigits: 2,
+        }).format(tx.valor).replace(/^\$/, 'U$');
+        const li = document.createElement('li');
+        li.className = 'transaction';
+        li.innerHTML = `
+          <div class="tx-info">
+            <span class="tx-onde">${tx.onde}</span>
+            <span class="tx-quando">${tx.quando}</span>
+          </div>
+          <span class="tx-valor">-${valor}</span>
+        `;
+        txList.appendChild(li);
+      });
 
       document.getElementById('content').classList.remove('hidden');
     }
@@ -71,8 +97,8 @@
       document.getElementById('error').classList.add('hidden');
       document.getElementById('loading').classList.remove('hidden');
       try {
-        await main();
-        renderBalance();
+        const data = await fetchBalance();
+        renderBalance(data);
       } catch (e) {
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('error').classList.remove('hidden');
