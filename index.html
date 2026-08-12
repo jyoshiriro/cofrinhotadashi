@@ -1,47 +1,86 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tadashi's Pig Bank</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="functions.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tadashi's Pig Bank</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body onload="init()">
+<body>
+  <div class="container">
+    <h1 class="title">🏦 Tadashi's Pig Bank</h1>
 
-    <h3>TADASHI'S PIG BANK</h3> 
+    <div class="card">
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Counting coins...</p>
+      </div>
 
-    <div id="div_authentication">
-        <input type="password" placeholder="Password" id="in_password" inputmode="numeric"> 
-        <button onclick="login()" type="submit">Enter</button>   
-        <div id="div_password_error" style="display: none;">Sorry! Try Again!</div>
+      <div id="content" class="content hidden">
+        <img id="tadashi-img" src="" alt="Tadashi" class="tadashi-img">
+        <p class="balance-label">My Savings</p>
+        <p id="balance-value" class="balance-value"></p>
+        <button class="refresh-btn" onclick="refresh()">🔄 Refresh</button>
+      </div>
+
+      <div id="error" class="error hidden">
+        <p>😢 Could not load balance.<br>Make sure you're on ether.fi.</p>
+        <button class="refresh-btn" onclick="refresh()">Try again</button>
+      </div>
     </div>
+  </div>
 
-    <div id="div_operations" style="display: none; ">
-    
-        <i>Hello, <b id="b_user"></b></i>
+  <script src="funcoes.js"></script>
+  <script>
+    function getImage(balance) {
+      if (balance < 10.01) return 'tadashi-nomoney.png';
+      if (balance <= 50.0)  return 'tadashi.png';
+      return 'tadashi-money.png';
+    }
 
-        <h1 onclick="loadBalance()">Balance: <span id="b_balance">0.00</span></h1>
+    function renderBalance() {
+      document.getElementById('loading').classList.add('hidden');
 
-        
-        <img src="tadashi.png" id="img_tadashi" style="height: 14em;">
-        
+      if (balanceInUSD === null || isNaN(balanceInUSD)) {
+        document.getElementById('error').classList.remove('hidden');
+        return;
+      }
 
-        <br>
-        <button onclick="deposit()" class="deposit">Deposit &starf;</button>
-        <button onclick="withdrawal()" class="withdrawal">Withdrawal &odash;</button>
-        <button onclick="buy()" class="buy">Buy &curarrm;</button>
+      const balanceEl = document.getElementById('balance-value');
+      document.getElementById('tadashi-img').src = getImage(balanceInUSD);
+      balanceEl.textContent = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(balanceInUSD);
 
-        <br><br>
-        <div>
-            <h3>Statement</h3>
-            <div id="div_statement">
+      balanceEl.className = 'balance-value ' + (
+        balanceInUSD < 10.01 ? 'balance-low'  :
+        balanceInUSD <= 50.0 ? 'balance-mid'  : 'balance-high'
+      );
 
-            </div>
-        </div>
-    
-    </div>
+      document.getElementById('content').classList.remove('hidden');
+    }
 
+    async function refresh() {
+      document.getElementById('content').classList.add('hidden');
+      document.getElementById('error').classList.add('hidden');
+      document.getElementById('loading').classList.remove('hidden');
+      try {
+        await main();
+        renderBalance();
+      } catch (e) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error').classList.remove('hidden');
+        console.error(e);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', refresh);
+  </script>
 </body>
 </html>

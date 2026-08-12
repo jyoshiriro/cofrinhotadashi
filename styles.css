@@ -1,45 +1,138 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    padding: 1em;
+  min-height: 100dvh;
+  background: linear-gradient(160deg, #ffd6e7 0%, #fff4b0 55%, #b8f7c0 100%);
+  font-family: 'Nunito', 'Segoe UI', Tahoma, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
 }
 
-#div_authentication input, #div_authentication button {
-    font-size: large;
+/* ── Layout ── */
+.container {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 }
 
-#div_password_error {
-    background-color: darksalmon;
-    color: brown;
-    font-weight: bold;
+/* ── Title ── */
+.title {
+  font-family: 'Fredoka One', 'Arial Rounded MT Bold', cursive;
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  color: #7b3fa0;
+  text-align: center;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.07);
+  letter-spacing: 0.01em;
 }
 
-#div_operations button {
-    font-weight: bold;
-    padding: 1em;
+/* ── Card ── */
+.card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 2.5rem 2rem;
+  text-align: center;
 }
 
-#b_balance {
-    color: rgb(12, 100, 71);
+/* ── Tadashi image ── */
+.tadashi-img {
+  width: clamp(140px, 45vw, 220px);
+  height: auto;
+  margin-bottom: 1.25rem;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
 }
 
-.deposit {
-    color: rgb(120, 173, 243);
-    background-color: rgb(9, 36, 110);
-    margin-right: 0.7em;
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
 }
 
-.withdrawal {
-    color: antiquewhite;
-    background-color: crimson;
-    margin-right: 0.7em;
+/* ── Balance ── */
+.balance-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 0.3rem;
 }
 
-.buy {
-    color: violet;
-    background-color: rebeccapurple;
+.balance-value {
+  font-family: 'Fredoka One', 'Arial Rounded MT Bold', cursive;
+  font-size: clamp(2.8rem, 12vw, 4.5rem);
+  line-height: 1;
+  margin-bottom: 1.75rem;
 }
 
+.balance-low  { color: #e74c3c; }
+.balance-mid  { color: #e67e22; }
+.balance-high { color: #27ae60; }
 
-#div_statement span a {
-    font-weight: bold;
-    color: orangered;
+/* ── Refresh button ── */
+.refresh-btn {
+  background: #7b3fa0;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  padding: 0.65rem 1.75rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
 }
+
+.refresh-btn:hover  { background: #6a2d8e; }
+.refresh-btn:active { transform: scale(0.95); }
+
+/* ── Loading ── */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 0;
+  color: #bbb;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #f0e0ff;
+  border-top-color: #7b3fa0;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Error ── */
+.error {
+  padding: 2rem 0;
+  color: #e74c3c;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* ── Utility ── */
+.hidden { display: none !important; }
