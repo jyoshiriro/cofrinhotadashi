@@ -44,23 +44,23 @@
     function renderBalance() {
       document.getElementById('loading').classList.add('hidden');
 
-      if (balanceInUSD === null || isNaN(balanceInUSD)) {
+      if (balanceInBRL === null || isNaN(balanceInBRL)) {
         document.getElementById('error').classList.remove('hidden');
         return;
       }
 
       const balanceEl = document.getElementById('balance-value');
-      document.getElementById('tadashi-img').src = getImage(balanceInUSD);
-      balanceEl.textContent = new Intl.NumberFormat('en-US', {
+      document.getElementById('tadashi-img').src = getImage(balanceInBRL);
+      balanceEl.textContent = new Intl.NumberFormat('pt-BR', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'BRL',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(balanceInUSD);
+      }).format(balanceInBRL);
 
       balanceEl.className = 'balance-value ' + (
-        balanceInUSD < 10.01 ? 'balance-low'  :
-        balanceInUSD <= 50.0 ? 'balance-mid'  : 'balance-high'
+        balanceInBRL < 10.01 ? 'balance-low'  :
+        balanceInBRL <= 50.0 ? 'balance-mid'  : 'balance-high'
       );
 
       document.getElementById('content').classList.remove('hidden');
