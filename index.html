@@ -27,7 +27,7 @@
 
         <div class="transactions-section">
           <p class="transactions-title">Last transactions</p>
-          <ul id="transactions" class="transactions"></ul>
+          <div id="transactions" class="transactions"></div>
         </div>
       </div>
 
@@ -71,22 +71,23 @@
 
       const txList = document.getElementById('transactions');
       txList.innerHTML = '';
-      (data.last7Transacions || []).forEach(tx => {
-        const valor = new Intl.NumberFormat(tx.moeda === 'BRL' ? 'pt-BR' : 'en-US', {
+      (data.lastTransacions || []).forEach(tx => {
+        const moeda = tx.moeda || 'BRL';
+        const valor = new Intl.NumberFormat(moeda === 'BRL' ? 'pt-BR' : 'en-US', {
           style: 'currency',
-          currency: tx.moeda,
+          currency: moeda,
           minimumFractionDigits: 2,
-        }).format(tx.valor).replace(/^\$/, 'U$');
-        const li = document.createElement('li');
-        li.className = 'transaction';
-        li.innerHTML = `
+        }).format(tx.valor).replace(/^\$/, 'U$ ');
+        const div = document.createElement('div');
+        div.className = 'transaction';
+        div.innerHTML = `
           <div class="tx-info">
             <span class="tx-onde">${tx.onde}</span>
             <span class="tx-quando">${tx.quando}</span>
           </div>
-          <span class="tx-valor">-${valor}</span>
+          <span class="tx-valor${tx.valor > 0 ? ' tx-valor--positive' : ''}">${valor}</span>
         `;
-        txList.appendChild(li);
+        txList.appendChild(div);
       });
 
       document.getElementById('content').classList.remove('hidden');
