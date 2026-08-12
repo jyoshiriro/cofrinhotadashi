@@ -170,6 +170,18 @@ body {
   color: #27ae60;
 }
 
+.tx-valor--cancelada .tx-valor-num {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.tx-cancelada-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #aaa;
+  white-space: nowrap;
+}
+
 /* ── Loading ── */
 .loading {
   display: flex;

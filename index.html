@@ -85,7 +85,9 @@
             <span class="tx-onde">${tx.onde}</span>
             <span class="tx-quando">${tx.quando}</span>
           </div>
-          <span class="tx-valor${tx.valor > 0 ? ' tx-valor--positive' : ''}">${valor}</span>
+          <span class="tx-valor${tx.valor > 0 ? ' tx-valor--positive' : ''}${tx.realizada === false ? ' tx-valor--cancelada' : ''}">
+            <span class="tx-valor-num">${valor}</span>${tx.realizada === false ? ' <span class="tx-cancelada-label">(operação cancelada)</span>' : ''}
+          </span>
         `;
         txList.appendChild(div);
       });
