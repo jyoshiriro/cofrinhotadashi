@@ -23,6 +23,7 @@
         <img id="tadashi-img" src="" alt="Tadashi" class="tadashi-img">
         <p class="balance-label">My Savings</p>
         <p id="balance-value" class="balance-value"></p>
+        <a id="pix-link" class="pix-link hidden" target="_blank" rel="noopener noreferrer">💸 Receive PIX</a>
         <button class="refresh-btn" onclick="refresh()">🔄 Refresh</button>
 
         <div class="transactions-section">
@@ -68,6 +69,15 @@
         balance < 10.01 ? 'balance-low'  :
         balance <= 50.0 ? 'balance-mid'  : 'balance-high'
       );
+
+      const pixLink = document.getElementById('pix-link');
+      if (data.pixKey) {
+        const pixString = gerarPixCopiaECola({ chave: data.pixKey, nome: 'Felipe Tadashi', cidade: 'Sao Paulo' });
+        pixLink.href = `https://quickchart.io/qr?text=${encodeURIComponent(pixString)}`;
+        pixLink.classList.remove('hidden');
+      } else {
+        pixLink.classList.add('hidden');
+      }
 
       const txList = document.getElementById('transactions');
       txList.innerHTML = '';
